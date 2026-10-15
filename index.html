@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>new.html</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #101018;
+    color: #eeeeee;
+    font-family: Consolas, monospace;
+    overflow: hidden;
+}
+
+.tab {
+    height: 36px;
+    background: #191919;
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+    font-size: 13px;
+}
+
+.toolbar {
+    height: 37px;
+    background: #202020;
+    border-bottom: 1px solid #353535;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.filename {
+    color: #999;
+    font-size: 12px;
+}
+
+.play {
+    background: none;
+    border: none;
+    color: #43d9b2;
+    font-size: 23px;
+    cursor: pointer;
+    padding: 2px 10px;
+}
+
+.play:hover {
+    color: #ffffff;
+    transform: scale(1.15);
+}
+
+.editor {
+    padding: 16px 0;
+    font-size: 14px;
+    line-height: 27px;
+    overflow: auto;
+}
+
+.line {
+    display: flex;
+    white-space: pre;
+}
+
+.number {
+    color: #777;
+    width: 35px;
+    text-align: right;
+    padding-right: 12px;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.orange { color: #ffbd68; }
+.red { color: #ff637d; }
+.purple { color: #d99cff; }
+.green { color: #9ad88a; }
+.blue { color: #83b9ff; }
+.white { color: #eeeeee; }
+
+/* Full-screen video */
+.video-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.video-screen.active {
+    display: flex;
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 11;
+    background: rgba(30, 30, 30, 0.8);
+    color: white;
+    border: 1px solid #555;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 22px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="tab">★ &nbsp; new.html &nbsp; ×</div>
+
+<div class="toolbar">
+    <span class="filename">▸ &nbsp; new.html</span>
+
+    <button class="play" id="playButton"
+            title="Run video" aria-label="Play video">▶</button>
+</div>
+
+<div class="editor">
+    <div class="line">
+        <span class="number">1</span>
+        <span class="orange">&lt;!DOCTYPE html&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">2</span>
+        <span class="red">&lt;html</span> <span class="purple">lang</span><span class="white">=</span><span class="green">"en"</span><span class="red">&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">3</span>
+        <span class="red">&lt;head&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">4</span>
+        <span class="white">    </span><span class="red">&lt;meta</span> <span class="purple">charset</span><span class="white">=</span><span class="green">"UTF-8"</span><span class="red">&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">5</span>
+        <span class="white">    </span><span class="red">&lt;title&gt;</span><span class="blue">New Project</span><span class="red">&lt;/title&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">6</span>
+        <span class="red">&lt;/head&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">7</span>
+        <span class="red">&lt;body&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">8</span>
+        <span class="white">    </span><span class="red">&lt;h1&gt;</span><span class="blue">Hello World!</span><span class="red">&lt;/h1&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">9</span>
+        <span class="red">&lt;/body&gt;</span>
+    </div>
+    <div class="line">
+        <span class="number">10</span>
+        <span class="red">&lt;/html&gt;</span>
+    </div>
+</div>
+
+<div class="video-screen" id="videoScreen">
+    <button class="close" id="closeButton"
+            aria-label="Close video">×</button>
+
+    <video id="myVideo" playsinline controls>
+        <source src="yearning.mp4" type="video/mp4">
+        Your browser does not support this video.
+    </video>
+</div>
+
+<script>
+const playButton = document.getElementById("playButton");
+const videoScreen = document.getElementById("videoScreen");
+const video = document.getElementById("myVideo");
+const closeButton = document.getElementById("closeButton");
+
+playButton.addEventListener("click", async () => {
+    videoScreen.classList.add("active");
+    video.currentTime = 0;
+
+    try {
+        await video.play();
+    } catch (error) {
+        console.log("Press the video play control to start.");
+    }
+});
+
+function closeVideo() {
+    video.pause();
+    video.currentTime = 0;
+    videoScreen.classList.remove("active");
+}
+
+closeButton.addEventListener("click", closeVideo);
+video.addEventListener("ended", closeVideo);
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeVideo();
+});
+</script>
+
+</body>
+</html>
